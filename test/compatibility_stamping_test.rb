@@ -7,10 +7,12 @@ require 'models/person'
 require 'models/post'
 require 'models/comment'
 
-class CompatibilityStampingTests< Test::Unit::TestCase  # :nodoc:
- fixtures :people, :comments 
+class CompatibilityStampingTests < ActiveSupport::TestCase
+#TODO class CompatibilityStampingTests< Test::Unit::TestCase  # :nodoc:
+  #TODO fixtures :people, :comments 
 
   def setup
+    @delynn = people(:delynn)
     Person.stamper = @delynn
   end
 
