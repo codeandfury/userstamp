@@ -198,6 +198,10 @@ individually by executing the following command from the userstamp directory:
     ruby test/stamping_test.rb
     ruby test/userstamp_controller_test.rb
 
+If you want to run the tests on a local pull add "-Ilib/userstamp" before the test to allow 
+loading from the local directory instead of the gem file as installed. 
+(Ex. ruby -Ilib/userstamp test/stamping_test.rb)
+
 
 Bugs & Feedback
 ---------------
