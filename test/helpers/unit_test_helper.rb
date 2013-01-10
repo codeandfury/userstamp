@@ -9,6 +9,9 @@ require 'active_record/fixtures'
 require 'active_support'
 require 'init'
 
+require File.dirname(__FILE__) + '/../../libs/userstamp'
+require File.dirname(__FILE__) + '/../../libs/userstamp'
+
 # Setup test database tables
 config = YAML::load(IO.read(File.join(File.dirname(__FILE__), '..', 'database.yml')))[ENV['DB'] || 'test']
 ActiveRecord::Base.configurations = config
