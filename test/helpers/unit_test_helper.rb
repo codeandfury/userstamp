@@ -30,18 +30,16 @@ load(schema_file) if File.exist?(schema_file)
 
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
-  self.fixture_path = File.dirname(__FILE__), '..',  'fixtures'
+  self.fixture_path = File.join(File.dirname(__FILE__), '..',  'fixtures')
+  
   # Turn off transactional fixtures if you're working with MyISAM tables in MySQL
   self.use_transactional_fixtures = false
   
   # Instantiated fixtures are slow, but give you @david where you otherwise would need people(:david)
-  self.use_instantiated_fixtures  = false
+  self.use_instantiated_fixtures  = true
   
   self.pre_loaded_fixtures = false
-  fixtures :all
-  
-  puts "People #{Person.all}"
-  #setup :setup  
+  fixtures :all 
 end
 
 
