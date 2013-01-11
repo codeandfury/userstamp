@@ -2,10 +2,10 @@ $:.unshift(File.dirname(__FILE__))
 
 require 'helpers/unit_test_helper'
 Ddb::Userstamp.compatibility_mode = true
-require 'models/user'
-require 'models/person'
-require 'models/post'
-require 'models/comment'
+#require 'models/user'
+#require 'models/person'
+#require 'models/post'
+#require 'models/comment'
 
 class CompatibilityStampingTests < ActiveSupport::TestCase
 #TODO class CompatibilityStampingTests< Test::Unit::TestCase  # :nodoc:
@@ -17,6 +17,7 @@ class CompatibilityStampingTests < ActiveSupport::TestCase
   end
 
   def test_comment_creation_with_stamped_object
+    Person.stamper = @delynn
     assert_equal @delynn.id, Person.stamper
 
     comment = Comment.create(:comment => "Test Comment")
