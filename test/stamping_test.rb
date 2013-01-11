@@ -1,13 +1,8 @@
 $:.unshift(File.dirname(__FILE__))
 
 require 'helpers/unit_test_helper'
-require 'models/user'
-require 'models/person'
-require 'models/post'
-require 'models/comment'
 
-class StampingTests < Test::Unit::TestCase  # :nodoc:
-  fixtures :users, :people, :posts, :comments
+class StampingTests < ActiveSupport::TestCase
 
   def setup
     User.stamper = @zeus

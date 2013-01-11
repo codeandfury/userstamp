@@ -1,20 +1,12 @@
 $:.unshift(File.dirname(__FILE__))
 
 require 'helpers/functional_test_helper'
-require 'controllers/userstamp_controller'
-require 'controllers/users_controller'
-require 'controllers/posts_controller'
-require 'models/user'
-require 'models/person'
-require 'models/post'
-require 'models/comment'
 
 ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
 end
 
-class PostsControllerTest < Test::Unit::TestCase
-  fixtures :users, :people, :posts, :comments
+class PostsControllerTest < ActiveSupport::TestCase
 
   def setup
     @controller   = PostsController.new

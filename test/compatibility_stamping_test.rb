@@ -1,7 +1,14 @@
 $:.unshift(File.dirname(__FILE__))
 
 require 'helpers/unit_test_helper'
+
+# Because compatibility_mode must be set before the model is read, load the models after setting the mode
 Ddb::Userstamp.compatibility_mode = true
+load 'test/models/comment.rb'
+load 'test/models/person.rb'
+load 'test/models/ping.rb'
+load 'test/models/post.rb'
+load 'test/models/user.rb'
 
 class CompatibilityStampingTests < ActiveSupport::TestCase
 

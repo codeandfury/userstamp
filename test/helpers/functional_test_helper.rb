@@ -1,19 +1,24 @@
-$:.unshift(File.dirname(__FILE__) + '/../..')
-$:.unshift(File.dirname(__FILE__) + '/../../lib')
-schema_file = File.join(File.dirname(__FILE__), '..', 'schema.rb')
-ENV["RAILS_ENV"] = "test"
 require 'rubygems'
 require 'test/unit'
-require 'active_support'
-require 'active_support/test_case'
 require 'active_record'
 require 'active_record/fixtures'
+require 'active_support'
+require 'active_support/test_case'
 require 'action_controller'
 require 'action_controller/test_case'
-require 'action_controller/test_process'
-require 'action_controller/integration'
-require 'init'
 
+# Add locations to the load path
+$:.unshift(File.dirname(__FILE__) + '/../..')
+$:.unshift(File.dirname(__FILE__) + '/../../lib')
+
+require 'init'
+require 'controllers/userstamp_controller'
+require 'controllers/users_controller'
+require 'controllers/posts_controller'
+
+# Setup test database tables
+schema_file = File.join(File.dirname(__FILE__), '..', 'schema.rb')
+ENV["RAILS_ENV"] = "test"
 config = YAML::load(IO.read(File.join(File.dirname(__FILE__), '..', 'database.yml')))[ENV['DB'] || 'test']
 ActiveRecord::Base.configurations = config
 ActiveRecord::Base.establish_connection(config)
@@ -23,15 +28,17 @@ ActionController::Base.logger = Logger.new(File.dirname(__FILE__) + "/controller
 
 load(schema_file) if File.exist?(schema_file)
 
-Test::Unit::TestCase.fixture_path = File.join(File.dirname(__FILE__), '..', 'fixtures')
-$:.unshift(Test::Unit::TestCase.fixture_path)
 
-class Test::Unit::TestCase
+class ActiveSupport::TestCase
+  include ActiveRecord::TestFixtures
+  self.fixture_path = File.join(File.dirname(__FILE__), '..',  'fixtures')
+  
   # Turn off transactional fixtures if you're working with MyISAM tables in MySQL
   self.use_transactional_fixtures = true
-
+  
   # Instantiated fixtures are slow, but give you @david where you otherwise would need people(:david)
   self.use_instantiated_fixtures  = true
-
-  # Add more helper methods to be used by all tests here...
+  
+  self.pre_loaded_fixtures = false
+  fixtures :all 
 end
