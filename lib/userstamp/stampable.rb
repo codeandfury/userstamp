@@ -68,34 +68,28 @@ module Ddb #:nodoc:
         def stampable(options = {})
           defaults  = {
                         :stamper_class_name => :user,
-                        :creator_attribute  => :creator_id,
-                        :updater_attribute  => :updater_id,
-                        :deleter_attribute  => :deleter_id
+                        :creator_attribute  => Ddb::Userstamp.compatibility_mode ? :created_by : :creator_id,
+                        :updater_attribute  => Ddb::Userstamp.compatibility_mode ? :updated_by : :updater_id,
+                        :deleter_attribute  => Ddb::Userstamp.compatibility_mode ? :deleted_by : :deleter_id
                       }.merge(options)
-          
-          if Ddb::Userstamp.compatibility_mode or self.respond_to?(:created_by)
-            defaults[:creator_attribute] = :created_by
-          end
-          
-          if Ddb::Userstamp.compatibility_mode or self.respond_to?(:updated_by)
-            defaults[:updater_attribute] = :updated_by
-          end
-          
-          if Ddb::Userstamp.compatibility_mode or self.respond_to?(:deleted_by)
-            defaults[:deleter_attribute] = :deleted_by
-          end
-
-          puts "<<<<< self >>>>> = #{self}"
-          puts ":stamper_class_name #{:stamper_class_name.to_sym}"
-          puts ":creator_attribute #{:creator_attribute.to_sym}"
-          puts ":updater_attribute #{:updater_attribute.to_sym}"
-          puts ":deleter_attribute #{:deleter_attribute.to_sym}"
-          
-          puts "self.respond_to?(:updated_by) #{self.respond_to?(:updated_by.to_sym)}"
-          puts "self.respond_to?(:created_by) #{self.respond_to?(:created_by.to_sym)}"
-          puts "self.respond_to?(:deleted_by) #{self.respond_to?(:deleted_by.to_sym)}"
-          puts "self.respond_to?(:deleter_id) #{self.respond_to?(:deleter_id.to_sym)}"
-          puts "<<<<< defaults >>>>> #{defaults.inspect}"
+                      
+                    
+          if ! Ddb::Userstamp.compatibility_mode
+             # Check if the class includes a *_by field and change if needed (only if)
+            instance_eval do
+              if self.inspect.include?("created_by") 
+                defaults[:creator_attribute] = :created_by
+              end
+              
+              if self.inspect.include?("updated_by") 
+                defaults[:updater_attribute] = :updated_by
+              end
+              
+              if self.inspect.include?("deleted_by") 
+                defaults[:deleter_attribute] = :deleted_by
+              end
+            end 
+          end           
 
           self.stamper_class_name = defaults[:stamper_class_name].to_sym
           self.creator_attribute  = defaults[:creator_attribute].to_sym
@@ -112,8 +106,8 @@ module Ddb #:nodoc:
             before_save     :set_updater_attribute
             before_create   :set_creator_attribute
             
-            # Altered to work for any delete attribute rathar than just the paranoid gem                     
-            if self.respond_to?(:deleter_attribute)
+            # Altered to work for any delete attribute rathar than just the paranoid gem                
+            if self.inspect.include?(defaults[:deleter_attribute].to_s)
               belongs_to :deleter, :class_name => self.stamper_class_name.to_s.singularize.camelize,
                                    :foreign_key => self.deleter_attribute
               before_destroy  :set_deleter_attribute
