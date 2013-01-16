@@ -22,6 +22,24 @@ describe "Userstamp" do
   end
   
   describe "stampable" do
+    context "default" do
+      before(:each) do
+        class Comment < ActiveRecord::Base
+          stampable :stamper_class_name => :user
+        end
+        
+        User.stamper = @zeus
+      end
+      
+      it "marks the creator_id and the updated_by" do
+        @comment = Comment.create(text: "basic comment")
+        expect(@comment.creator_id).to eq @zeus.id
+        expect(@comment.creator).to eq @zeus
+        expect(@comment.updated_by).to eq @zeus.id
+        expect(@comment.updater).to eq @zeus
+      end
+    end
+    
     context "compatibility mode is true" do
       before(:each) do
         # Class must be re-defined after compatibility_mode is changed

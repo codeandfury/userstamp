@@ -28,6 +28,14 @@ ActiveRecord::Schema.define(:version => 0) do
     t.column :deleter_id,     :integer
     t.column :deleted_at,     :datetime
   end
+  
+  create_table :comments, :force => true do |t|
+    t.column :text,           :string
+    t.column :creator_id,     :integer
+    t.column :created_on,     :datetime
+    t.column :updated_by,     :integer
+    t.column :updated_at,     :datetime
+  end
 
   create_table :pings, :force => true do |t|
     t.column :post_id,        :integer
