@@ -87,8 +87,9 @@ module Ddb #:nodoc:
                                  
             before_save     :set_updater_attribute
             before_create   :set_creator_attribute
-                                 
-            if defined?(Caboose::Acts::Paranoid)
+            
+            # Altered to work for any delete attribute rathar than just the paranoid gem                     
+            if self.respond_to?(:deleter_attribute)
               belongs_to :deleter, :class_name => self.stamper_class_name.to_s.singularize.camelize,
                                    :foreign_key => self.deleter_attribute
               before_destroy  :set_deleter_attribute
