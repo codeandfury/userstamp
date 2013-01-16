@@ -23,7 +23,7 @@ describe "Userstamp" do
   
   describe "stampable" do
     context "default" do
-      before(:each) do
+      before(:all) do
         class Comment < ActiveRecord::Base
           stampable :stamper_class_name => :user
         end
@@ -41,7 +41,7 @@ describe "Userstamp" do
     end
     
     context "compatibility mode is true" do
-      before(:each) do
+      before(:all) do
         # Class must be re-defined after compatibility_mode is changed
         Ddb::Userstamp.compatibility_mode = true
         class Person < ActiveRecord::Base
@@ -76,7 +76,7 @@ describe "Userstamp" do
     end
     
     context "compatibility mode is false" do
-      before(:each) do
+      before(:all) do
         # This is the default value for the compatibility mode
         # Ddb::Userstamp.compatibility_mode = false
         User.stamper = @zeus
@@ -107,7 +107,7 @@ describe "Userstamp" do
     end
     
     context "custom stampable fields" do
-      before(:each) do
+      before(:all) do
         
       end
     end  
