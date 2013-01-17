@@ -71,8 +71,7 @@ module Ddb #:nodoc:
                         :creator_attribute  => Ddb::Userstamp.compatibility_mode ? :created_by : :creator_id,
                         :updater_attribute  => Ddb::Userstamp.compatibility_mode ? :updated_by : :updater_id,
                         :deleter_attribute  => Ddb::Userstamp.compatibility_mode ? :deleted_by : :deleter_id
-                      }.merge(options)
-                      
+                      }.merge(options)         
                     
           if ! Ddb::Userstamp.compatibility_mode
              # Check if the class includes a *_by field and change if needed (only if)
@@ -89,7 +88,7 @@ module Ddb #:nodoc:
                 defaults[:deleter_attribute] = :deleted_by
               end
             end 
-          end           
+          end         
 
           self.stamper_class_name = defaults[:stamper_class_name].to_sym
           self.creator_attribute  = defaults[:creator_attribute].to_sym

@@ -38,13 +38,17 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :pings, :force => true do |t|
-    t.column :post_id,        :integer
     t.column :ping,           :string
-    t.column :creator_name,   :string
+    t.column :creator_user,   :string
     t.column :created_at,     :datetime
-    t.column :updater_name,   :string
+    t.column :updater_user,   :string
     t.column :updated_at,     :datetime
-    t.column :deleter_name,   :string
+    t.column :deleter_user,   :string
     t.column :deleted_at,     :datetime
+  end
+  
+  create_table :faces, :force => true do |t|
+    t.column :test_name,       :string
+    t.userstamps(true)
   end
 end

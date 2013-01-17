@@ -42,7 +42,11 @@ setting up your environment on a per request basis.
 To better understand how all this works, I think an example is in order. For this example we will
 assume that a weblog application is comprised of User and Post objects. The first thing we need to
 do is create the migrations for these objects, and the plug-in gives you a `userstamps`
-method for very easily doing this:
+method for very easily doing this. This will add the following fields 
+
+creator_id
+updator_id
+deleter_id (if true is passed)
 
 ```ruby
 class CreateUsers < ActiveRecord::Migration
@@ -63,7 +67,7 @@ class CreatePosts < ActiveRecord::Migration
   def self.up
     create_table :posts, :force => true do |t|
       t.timestamps
-      t.userstamps
+      t.userstamps(true) # Includes delete field
       t.title
     end
   end
@@ -170,6 +174,10 @@ following line to the Rails.root/config/initializers/userstamp.rb file:
 Ddb::Userstamp.compatibility_mode = true
 ```
 
+  created_by
+  updated_by
+  deleted_by (if true is passed)
+
 If you are having a difficult time getting the Userstamp plug-in to work, I recommend you checkout
 the sample application that I created. You can find this application on [GitHub](http://github.com/delynn/userstamp_sample)
 
@@ -191,20 +199,12 @@ RDoc has been run on the plugin directory and is available in the doc directory.
 Running Unit Tests
 ------------------
 
-There are extensive unit tests in the "test" directory of the plugin. These test can be run
-individually by executing the following command from the userstamp directory:
+There is a single RSpec file with multiple tests for the plugin. 
 
-    ruby test/compatibility_stamping_test.rb
-    ruby test/stamping_test.rb
-    ruby test/userstamp_controller_test.rb
+The test can be run by executing the following command from the userstamp directory:
+    rspec spec/lib/userstamp_spec.rb
 
-If you want to run the tests on a local pull add "-Ilib/userstamp" before the test to allow 
-loading from the local directory instead of the gem file as installed. 
-
-    ruby -Ilib/userstamp test/compatibility_stamping_test.rb
-    ruby -Ilib/userstamp test/stamping_test.rb
-    ruby -Ilib/userstamp test/userstamp_controller_test.rb
-
+It is cofigured to work with guard. To use guard do a 'gem install guard-rspec'. Then just run 'guard'
 
 Bugs & Feedback
 ---------------
