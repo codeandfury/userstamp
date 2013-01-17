@@ -42,11 +42,8 @@ setting up your environment on a per request basis.
 To better understand how all this works, I think an example is in order. For this example we will
 assume that a weblog application is comprised of User and Post objects. The first thing we need to
 do is create the migrations for these objects, and the plug-in gives you a `userstamps`
-method for very easily doing this. This will add the following fields 
-
-    creator_id
-    updator_id
-    deleter_id (if true is passed)
+method for very easily doing this. This will add creator_id, updator_id, and deleter_id fields. 
+The delete field will only be created if a true argument is passed into t.userstamps
 
 ```ruby
 class CreateUsers < ActiveRecord::Migration
@@ -167,16 +164,12 @@ end
 ```
 
 If you are upgrading your application from the old version of Userstamp, there is a compatibility
-mode to have the plug-in use the old "_by" columns by default. To enable this mode, add the
+mode to have the plug-in use the old created_by, updated_by, and deleted_by columns by default. To enable this mode, add the
 following line to the Rails.root/config/initializers/userstamp.rb file:
 
 ```ruby
 Ddb::Userstamp.compatibility_mode = true
 ```
-
-    created_by
-    updated_by
-    deleted_by (if true is passed)
 
 If you are having a difficult time getting the Userstamp plug-in to work, I recommend you checkout
 the sample application that I created. You can find this application on [GitHub](http://github.com/delynn/userstamp_sample)
