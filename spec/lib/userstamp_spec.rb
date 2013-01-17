@@ -40,7 +40,7 @@ class PostsController < UserstampController
 
   protected
     def current_user
-      Person.find(session[:person_id])
+      Person.find(session[:user_id])
     end
     
     def set_stamper
@@ -199,13 +199,16 @@ describe "Userstamp" do
     end
   end
   
-  describe "controllers" do
+  describe "controllers", :type => :controller do
     
     let(:post) {Post.create(title: "Original")}
     
     before(:all) do
       User.stamper = @hera
-      session[:user_id] = @zeus.id
+      #UserstampController.any_instance.stub(:user_id).and_return(@zeus.id)
+      session = stub
+      Session.stub(:user_id).and_return(@zeus.id)
+      #session[:user_id] = @zeus.id
     end    
     
     it "creates a post and sets the creator field" do
