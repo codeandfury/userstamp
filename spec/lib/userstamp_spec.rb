@@ -11,49 +11,6 @@ class Post < ActiveRecord::Base
   stampable :stamper_class_name => :user
 end
 
-class UserstampController < ActionController::Base
-  include Ddb::Controller::Userstamp
-
-  protected
-    def current_user
-      User.find(session[:user_id])
-    end
-  #end
-end
-
-class PostsController < UserstampController
-  def create
-    @post = Post.create(params[:post])
-    render(:inline => "<%= @post.title %>")
-  end
-  
-  def edit
-    @post = Post.find(params[:id])
-    render(:inline  => "<%= @post.title %>")
-  end
-  
-  def update
-    @post = Post.find(params[:id])
-    @post.update_attributes(params[:post])
-    render(:inline => "<%= @post.title %>")
-  end
-
-  protected
-    def current_user
-      Person.find(session[:user_id])
-    end
-    
-    def set_stamper
-      Person.stamper = self.current_user
-    end
-
-    def reset_stamper
-      Person.reset_stamper
-    end    
-  #end
-end
-
-
 # ====================================================================================================================
 # RSpec Tests
 # ====================================================================================================================
@@ -196,39 +153,6 @@ describe "Userstamp" do
     it "can be selected by integer" do
       User.stamper = @hera.id
       expect(@hera.id).to eq User.stamper
-    end
-  end
-  
-  describe "controllers", :type => :controller do
-    
-    let(:post) {Post.create(title: "Original")}
-    
-    before(:all) do
-      User.stamper = @hera
-      #UserstampController.any_instance.stub(:user_id).and_return(@zeus.id)
-      session = stub
-      Session.stub(:user_id).and_return(@zeus.id)
-      #session[:user_id] = @zeus.id
-    end    
-    
-    it "creates a post and sets the creator field" do
-      post :create, {:post => { :title => "Created" }}
-      puts "@post #{@post.inspect}"
-      expect(post.creator_id).to eq @zeus.id
-      expect(post.creator).to eq @zeus
-    end
-    
-    it "updates a post and sets the updater field" do
-      put :update, {:id => post.id, :post => {:title => "Different"}}
-      expect(post.title).to eq "Different"
-      expect(post.updater_id).to eq @zeus.id
-      expect(post.updater).to eq @zeus
-    end
-    
-    it "deletes a post and sets the deleter field" do
-      delete :destroy, {:id => post.id}
-      expect(post.deleter_id).to eq @zeus.id
-      expect(post.deleter).to eq @zeus
     end
   end
 end
