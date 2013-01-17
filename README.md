@@ -199,10 +199,18 @@ RDoc has been run on the plugin directory and is available in the doc directory.
 Running Unit Tests
 ------------------
 
-There is a single RSpec file with multiple tests for the plugin. 
+There are two rspec files to test this plugin. The userstamp_spec will test all the basic funcationality around having a stamper and model_stamp.
+The posts_controller_spec tests the plugins ability to integrate with a rails controller. 
 
-The test can be run by executing the following command from the userstamp directory:
+These tests can be run by executing the following command(s) from the userstamp directory:
+
     rspec spec/lib/userstamp_spec.rb
+    rspec spec/controllers/posts_controller_spec.rb
+    
+    OR 
+    
+    rspec spec
+    
 
 It is cofigured to work with guard. To use guard do a 'gem install guard-rspec'. Then just run 'guard'
 

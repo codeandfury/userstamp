@@ -1,3 +1,5 @@
+# Credit goes to http://codingdaily.wordpress.com/2011/01/14/test-a-gem-with-the-rails-3-stack/ for pointing me in the right direction
+
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
