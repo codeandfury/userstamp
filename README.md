@@ -1,11 +1,12 @@
-Userstamp Plugin (v 2.0)
+Userstamp Plugin (v 2.1)
 ========================
 
 Overview
 --------
 
-The Userstamp Plugin extends [ActiveRecord::Base](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) to add automatic updating of 'creator',
-'updater', and 'deleter' attributes. It is based loosely on the [ActiveRecord::Timestamp](http://api.rubyonrails.org/classes/ActiveRecord/Timestamp.html) module.
+The Userstamp Plugin extends [ActiveRecord::Base](http://api.rubyonrails.org/classes/ActiveRecord/Base.html) 
+to add automatic updating of 'creator', 'updater', and 'deleter' attributes. It is based loosely on the 
+[ActiveRecord::Timestamp](http://api.rubyonrails.org/classes/ActiveRecord/Timestamp.html) module.
 
 Two class methods (`model_stamper` and `stampable`) are implemented in this plugin.
 The `model_stamper` method is used in models that are responsible for creating, updating, or
@@ -42,7 +43,7 @@ setting up your environment on a per request basis.
 To better understand how all this works, I think an example is in order. For this example we will
 assume that a weblog application is comprised of User and Post objects. The first thing we need to
 do is create the migrations for these objects, and the plug-in gives you a `userstamps`
-method for very easily doing this. This will add creator_id, updator_id, and deleter_id fields. 
+method for very easily doing this. This will add creator_id, updater_id, and deleter_id fields. 
 The delete field will only be created if a true argument is passed into t.userstamps
 
 ```ruby
@@ -170,6 +171,8 @@ following line to the Rails.root/config/initializers/userstamp.rb file:
 ```ruby
 Ddb::Userstamp.compatibility_mode = true
 ```
+
+You can include the ability to validate the presence fo the created_by, updated_by, and deleted_by fields (Or their *_id equivalents)
 
 If you are having a difficult time getting the Userstamp plug-in to work, I recommend you checkout
 the sample application that I created. You can find this application on [GitHub](http://github.com/delynn/userstamp_sample)

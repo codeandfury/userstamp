@@ -63,8 +63,8 @@ module Ddb #:nodoc:
         #               :deleter_attribute  => :delete_user
         #   end
         #
-        # The method will automatically setup all the associations, and create <tt>before_save</tt>
-        # and <tt>before_create</tt> filters for doing the stamping.
+        # The method will automatically setup all the associations, and create <tt>before_validation</tt>
+        # and <tt>before_destroy</tt> callbacks for doing the stamping.
         def stampable(options = {})
           defaults  = {
                         :stamper_class_name => :user,
@@ -96,19 +96,15 @@ module Ddb #:nodoc:
           self.deleter_attribute  = defaults[:deleter_attribute].to_sym
 
           class_eval do
-            belongs_to :creator, :class_name => self.stamper_class_name.to_s.singularize.camelize,
-                                 :foreign_key => self.creator_attribute
+            belongs_to :creator, :class_name => self.stamper_class_name.to_s.singularize.camelize, :foreign_key => self.creator_attribute
+            belongs_to :updater, :class_name => self.stamper_class_name.to_s.singularize.camelize, :foreign_key => self.updater_attribute
                                  
-            belongs_to :updater, :class_name => self.stamper_class_name.to_s.singularize.camelize,
-                                 :foreign_key => self.updater_attribute
-                                 
-            before_save     :set_updater_attribute
-            before_create   :set_creator_attribute
+            before_validation   :set_updater_attribute
+            before_validation   :set_creator_attribute
             
             # Altered to work for any delete attribute rathar than just the paranoid gem                
             if self.inspect.include?(defaults[:deleter_attribute].to_s)
-              belongs_to :deleter, :class_name => self.stamper_class_name.to_s.singularize.camelize,
-                                   :foreign_key => self.deleter_attribute
+              belongs_to :deleter, :class_name => self.stamper_class_name.to_s.singularize.camelize, :foreign_key => self.deleter_attribute
               before_destroy  :set_deleter_attribute
             end
           end
@@ -129,7 +125,7 @@ module Ddb #:nodoc:
         end
 
         def stamper_class #:nodoc:
-          stamper_class_name.to_s.capitalize.constantize rescue nil
+          stamper_class_name.to_s.camelize.constantize rescue nil
         end
       end
 

@@ -1,3 +1,16 @@
+2.0.3 (2-1-2013)
+    * [robotex82] - Fixed issue where capitalized user classnames would fail to work
+
+    * Includes many fixed found in https://github.com/insphire/userstamp
+
+    * Updated to work in rails 3.2.11
+    
+    * Autodetection of the fields used in stamping (ex. updated_by vs updater_id) added. This also
+      removes the dependency on using the acts_as_paranoid gem to managed a deleter. Either a
+      deleted_by or an deleter_id will now be updated without further configuration. 
+
+    * Rebuild entire test platform to use rspec. Includes full testing of controller integrations.
+
 2.0 (2-17-2008)
     * [Ben  Wyrosdick] - Added a migration helper that gives migration scripts a <tt>userstamps</tt>
                          method.

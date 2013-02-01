@@ -5,3 +5,4 @@ pkg/*
 *.log
 *.sqlite3
 tmp/
+*.sublime*
