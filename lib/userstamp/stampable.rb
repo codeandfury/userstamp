@@ -66,30 +66,30 @@ module Ddb #:nodoc:
         # The method will automatically setup all the associations, and create <tt>before_validation</tt>
         # and <tt>before_destroy</tt> callbacks for doing the stamping.
         def stampable(options = {})
-          defaults  = {
-                        :stamper_class_name => :user,
-                        :creator_attribute  => Ddb::Userstamp.compatibility_mode ? :created_by : :creator_id,
-                        :updater_attribute  => Ddb::Userstamp.compatibility_mode ? :updated_by : :updater_id,
-                        :deleter_attribute  => Ddb::Userstamp.compatibility_mode ? :deleted_by : :deleter_id
-                      }.merge(options)         
-                    
-          if ! Ddb::Userstamp.compatibility_mode
-             # Check if the class includes a *_by field and change if needed (only if)
-            instance_eval do
-              if self.inspect.include?("created_by") 
-                defaults[:creator_attribute] = :created_by
-              end
-              
-              if self.inspect.include?("updated_by") 
-                defaults[:updater_attribute] = :updated_by
-              end
-              
-              if self.inspect.include?("deleted_by") 
-                defaults[:deleter_attribute] = :deleted_by
-              end
-            end 
-          end         
+          defaults = {:stamper_class_name => :user}
 
+          instance_eval do
+            if Ddb::Userstamp.compatibility_mode or self.inspect.include?("created_by")
+              defaults[:creator_attribute] = :created_by
+            else
+              defaults[:creator_attribute] = :creator_id
+            end
+            
+            if Ddb::Userstamp.compatibility_mode or self.inspect.include?("updated_by")
+              defaults[:updater_attribute] = :updated_by
+            else
+              defaults[:updater_attribute] = :updater_id
+            end
+            
+            if Ddb::Userstamp.compatibility_mode or self.inspect.include?("deleted_by")
+              defaults[:deleter_attribute] = :deleted_by
+            else
+              defaults[:deleter_attribute] = :deleter_id
+            end
+          end 
+
+          defaults = defaults.merge(options)    
+                    
           self.stamper_class_name = defaults[:stamper_class_name].to_sym
           self.creator_attribute  = defaults[:creator_attribute].to_sym
           self.updater_attribute  = defaults[:updater_attribute].to_sym
@@ -121,6 +121,7 @@ module Ddb #:nodoc:
           original_value = self.record_userstamp
           self.record_userstamp = false
           yield
+        ensure
           self.record_userstamp = original_value
         end
 
